@@ -4,6 +4,7 @@ import PokemonList from './components/PokemonList'
 import SearchBar from './components/SearchBar'
 import TypeFilter from './components/TypeFilter'
 import PokemonDetails from './components/PokemonDetails'
+import TrainerList from './components/TrainerList'
 
 function App() {
   const [search, setSearch] = useState('')
@@ -57,7 +58,10 @@ function App() {
         <p>Nenhum Pokémon encontrado. Tente outra pesquisa</p>
       )}
 
-      
+      <TrainerList
+        trainers={pokedexData.trainers}
+        pokemon={pokedexData.pokemon}
+      />
     </main>
   )
 }

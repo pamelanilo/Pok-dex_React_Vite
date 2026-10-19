@@ -1,0 +1,40 @@
+
+.trainers-section {
+  margin: 40px 0;
+}
+
+.trainers-section h2 {
+  margin-bottom: 20px;
+}
+
+.trainers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.trainer-card {
+  padding: 20px;
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.trainer-card h3 {
+  margin-top: 0;
+}
+
+.trainer-card h4 {
+  margin-bottom: 10px;
+}
+
+.trainer-pokemon-list {
+  padding-left: 20px;
+}
+
+.trainer-pokemon-list li {
+  margin: 8px 0;
+  text-transform: capitalize;
+}
