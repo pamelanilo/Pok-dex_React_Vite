@@ -4,6 +4,29 @@ Aplicação web desenvolvida com **React + Vite** para explorar Pokémon, consul
 
 O projeto apresenta uma Pokédex com os 151 Pokémon da primeira geração, permitindo buscar criaturas pelo nome ou número, filtrar por tipo, visualizar informações detalhadas e salvar favoritos no navegador. Também possui uma área dedicada aos treinadores, com suas imagens, insígnias e equipes Pokémon.
 
+## Capturas de Tela
+
+## Capturas de Tela
+
+### Página Principal
+
+![Pokédex](pokedex-react/src/assets/images/pokedex-principal.png)
+
+### Filtro por Tipo
+
+![Filtro Ghost](pokedex-react/src/assets/images/pokedex-filtro-ghost.png)
+
+### Detalhes de Pokémon
+
+![Detalhes](pokedex-react/src/assets/images/detalhes-pokemon.png)
+
+### Favoritos
+
+![Favoritos](pokedex-react/src/assets/images/favoritos.png)
+
+### Treinadores
+
+![Treinadores](pokedex-react/src/assets/images/treinadores.png)
 ## Funcionalidades
 
 A aplicação permite:
@@ -63,6 +86,9 @@ A aplicação está organizada da seguinte maneira:
 ```text
 Pokédex_React_Vite/
 ├── README.md
+├── img_README/
+│   ├── pagina-inicial.png
+│   └── lista-pokemon.png
 └── pokedex-react/
     ├── index.html
     ├── package.json
