@@ -6,8 +6,6 @@ O projeto apresenta uma Pokédex com os 151 Pokémon da primeira geração, perm
 
 ## Capturas de Tela
 
-## Capturas de Tela
-
 ### Página Principal
 
 ![Pokédex](pokedex-react/src/assets/images/pokedex-principal.png)
