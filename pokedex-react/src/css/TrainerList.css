@@ -1,40 +1,123 @@
 
 .trainers-section {
-  margin: 40px 0;
+  width: 100%;
 }
 
-.trainers-section h2 {
-  margin-bottom: 20px;
+.trainers-section > h2 {
+  margin: 0 0 22px;
+  color: #202b3c;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .trainers-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+  align-items: stretch;
 }
 
 .trainer-card {
-  padding: 20px;
+  min-width: 0;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid #e3e9f2;
+  border-radius: 20px;
   background: #ffffff;
-  color: #1e293b;
-  border: 1px solid #cbd5e1;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 5px 20px rgba(31, 45, 70, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trainer-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(31, 45, 70, 0.09);
 }
 
 .trainer-card h3 {
-  margin-top: 0;
+  margin: 0 0 14px;
+  overflow-wrap: anywhere;
+  color: #202b3c;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.trainer-card p {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #fff0f0;
+  color: #b82f3b;
+  font-size: 0.9rem;
 }
 
 .trainer-card h4 {
-  margin-bottom: 10px;
+  margin: 0 0 14px;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .trainer-pokemon-list {
-  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .trainer-pokemon-list li {
-  margin: 8px 0;
-  text-transform: capitalize;
+  min-width: 0;
+  padding: 11px 12px;
+  overflow-wrap: anywhere;
+  border: 1px solid #edf1f7;
+  border-radius: 10px;
+  background: #f8faff;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.trainer-pokemon-list li:hover {
+  background: #eef3fb;
+}
+
+@media (max-width: 600px) {
+  .trainers-list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .trainer-card {
+    padding: 20px;
+  }
+}
+
+
+.trainer-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  margin-bottom: 12px;
+}
+
+.trainer-image {
+  display: block;
+  width: 120px;
+  height: 150px;
+  object-fit: contain;
+  image-rendering: auto;
+  transition: transform 0.25s ease;
+}
+
+.trainer-card:hover .trainer-image {
+  transform: translateY(-4px) scale(1.04);
 }

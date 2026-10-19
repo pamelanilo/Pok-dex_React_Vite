@@ -2,7 +2,7 @@
 import '../css/PokemonCard.css'
 import { useEffect ,useState } from 'react'
 
-function PokemonCard({ pokemon , onSelectPokemon }) {
+function PokemonCard({ pokemon , onSelectPokemon, isFavorite,onToggleFavorite, }) {
     const [image, setImage] = useState('')
 
     useEffect(() => {
@@ -24,11 +24,28 @@ function PokemonCard({ pokemon , onSelectPokemon }) {
         role="button"
         tabIndex={0}
         onKeyDown={(event) => {
-        if (event.key === 'Enter' || event.key ===''){
-            event.preventDefault()
-            onSelectPokemon(pokemon)
+            if (event.key === 'Enter' || event.key ===''){
+                event.preventDefault()
+                onSelectPokemon(pokemon)
         }
     }}>
+        <button
+            type="button"
+            className={`favorite-button ${isFavorite ? 'is-favorite' : ''}`}
+            aria-label={
+                isFavorite
+                ? `Remover ${pokemon.name} dos favoritos`
+                : `Adicionar ${pokemon.name} aos favoritos`
+            }
+            aria-pressed={isFavorite}
+            onClick={(event) => {
+                event.stopPropagation()
+                onToggleFavorite(pokemon.id)
+            }}
+            >
+            {isFavorite ? '♥' : '♡'}
+        </button>
+
         {image && (
         <img 
             className="pokemon-image"
