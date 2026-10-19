@@ -10,15 +10,19 @@ function App() {
 
   
   const filteredPokemon = pokedexData.pokemon.filter((pokemon) => {
-  const matchesName = pokemon.name
-    .toLowerCase()
-    .includes(search.toLowerCase())
+    const searchValue = search.trim().toLowerCase()
+  
+    const matchesName = pokemon.name
+      .toLowerCase()
+      .includes(searchValue)
 
-  const matchesType =
-    selectedType === '' ||
-    pokemon.types.some((type) => type.name === selectedType)
+    const matchesId = String(pokemon.id).includes(searchValue)
 
-  return matchesName && matchesType
+    const matchesType=
+      selectedType === '' ||
+      pokemon.types.some((type) => type.name === selectedType)
+
+  return (matchesName || matchesId) && matchesType
 })
  
   return ( 
@@ -37,9 +41,11 @@ function App() {
 
       <p>Pokémon encontrados: {filteredPokemon.length}</p>
 
-      <PokemonList pokemon={filteredPokemon} />
-
-      <PokemonList pokemon={pokedexData.pokemon} />
+      {filteredPokemon.length > 0? (
+        <PokemonList pokemon = {filteredPokemon} />
+      ) : (
+        <p>Nenhum Pokémon encontrado. Tente outra pesquisa</p>
+      )}
     </main>
   )
 }

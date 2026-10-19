@@ -110,3 +110,80 @@
 .pokemon-card .pokemon-type.dark {
   background-color: #705848;
 }
+
+.pokemon-image {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin: 0 auto 10px;
+  image-rendering: pixelated;
+}
+
+.pokemon-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #cbd5e1;
+}
+
+.pokemon-stats p {
+  margin: 0;
+  font-size: 12px;
+  color: #334155;
+}
+
+
+.pokemon-stats {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #cbd5e1;
+}
+
+.stat {
+  min-width: 0;
+}
+
+.stat-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #334155;
+}
+
+.stat-bar {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: #dbe3ed;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background-color: #38a169;
+  transition: width 0.3s ease;
+}
+
+
+.pokemon-image {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px;
+  transition: transform 0.3s ease;
+}
+
+.pokemon-card:hover .pokemon-image {
+  transform: scale(1.08);
+}
+
+
