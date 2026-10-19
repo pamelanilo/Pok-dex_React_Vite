@@ -1,0 +1,14 @@
+.pokemon-card {
+    list-style: none;
+    padding: 16px;
+    margin: 8px;
+    background-color: #f1f5f9;
+    border-radius: 12px;
+    border: 1-x solid #cbd5e1;
+    font-family: Arial, sans-serif;
+    transition: transform 0,2s ease
+}
+
+.pokemon-card:hover {
+    transform: translateY(-3px);
+}
