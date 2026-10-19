@@ -3,11 +3,13 @@ import pokedexData from './data/pokedex-data.json'
 import PokemonList from './components/PokemonList'
 import SearchBar from './components/SearchBar'
 import TypeFilter from './components/TypeFilter'
+import PokemonDetails from './components/PokemonDetails'
 
 function App() {
   const [search, setSearch] = useState('')
   const [selectedType, setSelectedType] = useState('')
-
+  const [selectedPokemon, setSelectedPokemon] = useState(null)
+  
   
   const filteredPokemon = pokedexData.pokemon.filter((pokemon) => {
     const searchValue = search.trim().toLowerCase()
@@ -33,6 +35,11 @@ function App() {
 
       <SearchBar search={search} setSearch={setSearch} />
 
+      <PokemonDetails 
+        pokemon={selectedPokemon} 
+        onClose={() => setSelectedPokemon(null)}
+        />
+
       <TypeFilter
         types={pokedexData.types}
         selectedType={selectedType}
@@ -42,10 +49,15 @@ function App() {
       <p>Pokémon encontrados: {filteredPokemon.length}</p>
 
       {filteredPokemon.length > 0? (
-        <PokemonList pokemon = {filteredPokemon} />
+        <PokemonList 
+        pokemon = {filteredPokemon}
+        onSelectPokemon={setSelectedPokemon}
+        />
       ) : (
         <p>Nenhum Pokémon encontrado. Tente outra pesquisa</p>
       )}
+
+      
     </main>
   )
 }

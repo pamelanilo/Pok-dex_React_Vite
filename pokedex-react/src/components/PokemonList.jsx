@@ -1,13 +1,14 @@
 import PokemonCard from './PokemonCard'
 import '../css/PokemonList.css'
 
-function PokemonList ({pokemon}) {
+function PokemonList ({ pokemon, onSelectPokemon }) {
     return(
         <ul className="pokemon-list">
             {pokemon.map((item) => (
                 <PokemonCard
-                key={item.id}
-                pokemon={item}
+                    key={item.id}
+                    pokemon={item}
+                    onSelectPokemon={onSelectPokemon}
                 />
             ))}
         </ul>

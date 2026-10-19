@@ -2,7 +2,7 @@
 import '../css/PokemonCard.css'
 import { useEffect ,useState } from 'react'
 
-function PokemonCard({ pokemon }) {
+function PokemonCard({ pokemon , onSelectPokemon }) {
     const [image, setImage] = useState('')
 
     useEffect(() => {
@@ -19,13 +19,22 @@ function PokemonCard({ pokemon }) {
         },[pokemon.id])
 
   return (
-    <li className="pokemon-card">
-
-        <img
+    <li className="pokemon-card"
+        onClick={() => onSelectPokemon(pokemon)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key ===''){
+            event.preventDefault()
+            onSelectPokemon(pokemon)
+        }
+    }}>
+        {image && (
+        <img 
             className="pokemon-image"
             src={image}
             alt={pokemon.name}
-            loading="eager"/>
+            loading="eager"/>)}
 
         <strong>#{pokemon.id}</strong> - {pokemon.name}
 
