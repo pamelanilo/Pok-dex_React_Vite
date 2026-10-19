@@ -1,0 +1,20 @@
+
+.type-filter {
+  display: block;
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
+  margin: 12px auto;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background-color: white;
+  color: #1e293b;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.type-filter:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
