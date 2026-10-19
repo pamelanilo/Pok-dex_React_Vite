@@ -4,9 +4,9 @@
     margin: 8px;
     background-color: #f1f5f9;
     border-radius: 12px;
-    border: 1-x solid #cbd5e1;
+    border: 1px solid #cbd5e1;
     font-family: Arial, sans-serif;
-    transition: transform 0,2s ease
+    transition: transform 0.2s ease
 }
 
 .pokemon-card:hover {
@@ -25,8 +25,88 @@
   display: inline-block;
   padding: 4px 10px;
   border-radius: 999px;
-  background-color: #e2e8f0;
-  color: #1e293b;
+  color: #ffffff;
   font-size: 12px;
   font-weight: 600;
+  text-transform: capitalize;
+  background-color: #64748b;
+}
+
+
+/* Cores dos tipos de Pokémon */
+.pokemon-card .pokemon-type.grass {
+  background-color: #78c850;
+}
+
+.pokemon-card .pokemon-type.poison {
+  background-color: #a040a0;
+}
+
+.pokemon-card .pokemon-type.fire {
+  background-color: #f08030;
+}
+
+.pokemon-card .pokemon-type.water {
+  background-color: #6890f0;
+}
+
+.pokemon-card .pokemon-type.bug {
+  background-color: #a8b820;
+}
+
+.pokemon-card .pokemon-type.normal {
+  background-color: #a8a878;
+}
+
+.pokemon-card .pokemon-type.flying {
+  background-color: #a890f0;
+}
+
+.pokemon-card .pokemon-type.electric {
+  background-color: #f8d030;
+  color: #333;
+}
+
+.pokemon-card .pokemon-type.ground {
+  background-color: #e0c068;
+  color: #333;
+}
+
+.pokemon-card .pokemon-type.fighting {
+  background-color: #c03028;
+}
+
+.pokemon-card .pokemon-type.psychic {
+  background-color: #f85888;
+}
+
+.pokemon-card .pokemon-type.rock {
+  background-color: #b8a038;
+}
+
+.pokemon-card .pokemon-type.ice {
+  background-color: #98d8d8;
+  color: #333;
+}
+
+.pokemon-card .pokemon-type.ghost {
+  background-color: #705898;
+}
+
+.pokemon-card .pokemon-type.dragon {
+  background-color: #7038f8;
+}
+
+.pokemon-card .pokemon-type.fairy {
+  background-color: #ee99ac;
+  color: #333;
+}
+
+.pokemon-card .pokemon-type.steel {
+  background-color: #b8b8d0;
+  color: #333;
+}
+
+.pokemon-card .pokemon-type.dark {
+  background-color: #705848;
 }
