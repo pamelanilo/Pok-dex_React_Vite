@@ -1,0 +1,22 @@
+
+.pokemon-details {
+  margin: 24px auto;
+  padding: 24px;
+  max-width: 500px;
+  background: white;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.pokemon-details button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pokemon-details li {
+  margin: 8px 0;
+}
