@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import pokedexData from './data/pokedex-data.json'
 import PokemonList from './components/PokemonList'
@@ -8,28 +7,59 @@ import PokemonDetails from './components/PokemonDetails'
 import TrainerList from './components/TrainerList'
 import './css/App.css'
 
+const API_URL = 'http://localhost:8080/api/pokemons'
+
 function App() {
+  const [pokemons, setPokemons] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
   const [search, setSearch] = useState('')
   const [selectedType, setSelectedType] = useState('')
   const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [activeTab, setActiveTab] = useState('pokedex')
+
   const [favoriteIds, setFavoriteIds] = useState(() => {
-  try {
-    const savedFavorites = localStorage.getItem('pokedex-favorites')
-    return savedFavorites ? JSON.parse(savedFavorites) : []
-  } catch {
-    return []
-  }
-})
+    try {
+      const savedFavorites = localStorage.getItem('pokedex-favorites')
+      return savedFavorites ? JSON.parse(savedFavorites) : []
+    } catch {
+      return []
+    }
+  })
 
-useEffect(() => {
-  localStorage.setItem(
-    'pokedex-favorites',
-    JSON.stringify(favoriteIds)
-  )
-}, [favoriteIds])
+  // Busca os Pokémon na API
+  useEffect(() => {
+    async function carregarPokemons() {
+      try {
+        const response = await fetch(API_URL)
 
-  const filteredPokemon = pokedexData.pokemon.filter((pokemon) => {
+        if (!response.ok) {
+          throw new Error('Não foi possível carregar os Pokémon.')
+        }
+
+        const data = await response.json()
+        setPokemons(data)
+      } catch (error) {
+        setError(error.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    carregarPokemons()
+  }, [])
+
+  // Salva os favoritos no navegador
+  useEffect(() => {
+    localStorage.setItem(
+      'pokedex-favorites',
+      JSON.stringify(favoriteIds)
+    )
+  }, [favoriteIds])
+
+  // Pesquisa e filtro
+  const filteredPokemon = pokemons.filter((pokemon) => {
     const searchValue = search.trim().toLowerCase()
 
     const matchesName = pokemon.name
@@ -45,7 +75,7 @@ useEffect(() => {
     return (matchesName || matchesId) && matchesType
   })
 
-  const favoritePokemon = pokedexData.pokemon.filter((pokemon) =>
+  const favoritePokemon = pokemons.filter((pokemon) =>
     favoriteIds.includes(pokemon.id)
   )
 
@@ -121,7 +151,11 @@ useEffect(() => {
             onClose={() => setSelectedPokemon(null)}
           />
 
-          {filteredPokemon.length > 0 ? (
+          {loading ? (
+            <p className="empty-message">Carregando Pokémon...</p>
+          ) : error ? (
+            <p className="empty-message">{error}</p>
+          ) : filteredPokemon.length > 0 ? (
             <PokemonList
               pokemon={filteredPokemon}
               onSelectPokemon={setSelectedPokemon}
@@ -147,7 +181,7 @@ useEffect(() => {
 
           <TrainerList
             trainers={pokedexData.trainers}
-            pokemon={pokedexData.pokemon}
+            pokemon={pokemons}
           />
         </section>
       )}
@@ -161,7 +195,9 @@ useEffect(() => {
             </div>
           </div>
 
-          {favoritePokemon.length > 0 ? (
+          {loading ? (
+            <p className="empty-message">Carregando favoritos...</p>
+          ) : favoritePokemon.length > 0 ? (
             <PokemonList
               pokemon={favoritePokemon}
               onSelectPokemon={setSelectedPokemon}

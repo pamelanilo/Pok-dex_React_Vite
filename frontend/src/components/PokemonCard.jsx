@@ -53,7 +53,11 @@ function PokemonCard({ pokemon , onSelectPokemon, isFavorite,onToggleFavorite, }
             alt={pokemon.name}
             loading="eager"/>)}
 
-        <strong>#{pokemon.id}</strong> - {pokemon.name}
+        <strong>#{String(pokemon.id).padStart(3, '0')}</strong>
+
+            <h3 className="pokemon-name">
+            {pokemon.name}
+            </h3>
 
         <div className="pokemon-types">
             {pokemon.types.map((type) => (

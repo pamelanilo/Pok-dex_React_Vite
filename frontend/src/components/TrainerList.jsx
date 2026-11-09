@@ -1,4 +1,3 @@
-
 import '../css/TrainerList.css'
 
 const trainerImages = {
@@ -18,13 +17,26 @@ const trainerImages = {
 
 const trainerImagesUrl = 'https://play.pokemonshowdown.com/sprites/trainers/'
 
+const pokemonImagesUrl =
+  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'
+
 function TrainerList({ trainers, pokemon }) {
   return (
     <section className="trainers-section">
-      <h2>Treinadores Pokémon</h2>
+      <div className="trainers-heading">
+        <div>
+          <span className="trainers-eyebrow">UNIVERSO POKÉMON</span>
+          <h2>Treinadores</h2>
+          <p>Conheça os treinadores e suas equipes.</p>
+        </div>
+
+        <span className="trainers-count">
+          {trainers.length} treinadores
+        </span>
+      </div>
 
       <div className="trainers-list">
-        {trainers.map((trainer) => {
+        {trainers.map((trainer, index) => {
           const team = trainer.pokemonIds
             .map((pokemonId) =>
               pokemon.find((item) => item.id === pokemonId)
@@ -34,9 +46,25 @@ function TrainerList({ trainers, pokemon }) {
           const imageFile = trainerImages[trainer.name]
 
           return (
-            <article className="trainer-card" key={trainer.id}>
-              <div className="trainer-image-container">
-                {imageFile ? (
+            <article
+              className={`trainer-card trainer-theme-${index % 4}`}
+              key={trainer.id}
+            >
+              <div className="trainer-card-top">
+                <span className="trainer-card-label">
+                  POKÉMON TRAINER
+                </span>
+
+                <span className="trainer-badges">
+                  <span className="badge-icon">★</span>
+                  {Number(trainer.badges ?? 0)} insígnias
+                </span>
+              </div>
+
+              <div className="trainer-portrait">
+                <div className="trainer-portrait-circle" />
+
+                {imageFile && (
                   <img
                     className="trainer-image"
                     src={`${trainerImagesUrl}${imageFile}`}
@@ -46,24 +74,55 @@ function TrainerList({ trainers, pokemon }) {
                       event.currentTarget.style.display = 'none'
                     }}
                   />
-                ) : null}
+                )}
               </div>
 
-              <h3>{trainer.name}</h3>
+              <div className="trainer-information">
+                <span className="trainer-subtitle">
+                  TREINADOR Nº {String(trainer.id).padStart(2, '0')}
+                </span>
 
-              <p>
-                Insígnias: <strong>{trainer.badges}</strong>
-              </p>
+                <h3>{trainer.name}</h3>
+              </div>
 
-              <h4>Equipe Pokémon</h4>
+              <div className="trainer-team">
+                <div className="trainer-team-heading">
+                  <h4>Minha equipe</h4>
+                  <span>{team.length} Pokémon</span>
+                </div>
 
-              <ul className="trainer-pokemon-list">
-                {team.map((item, index) => (
-                  <li key={`${trainer.id}-${index}`}>
-                    #{item.id} - {item.name}
-                  </li>
-                ))}
-              </ul>
+                <div className="trainer-team-list">
+                  {team.map((item) => (
+                    <div
+                      className="trainer-team-pokemon"
+                      key={`${trainer.id}-${item.id}`}
+                      title={`#${item.id} - ${item.name}`}
+                    >
+                      <img
+                        src={`${pokemonImagesUrl}${item.id}.png`}
+                        alt={item.name}
+                        loading="lazy"
+                        onError={(event) => {
+                          event.currentTarget.style.display = 'none'
+                        }}
+                      />
+
+                      <span>{item.name}</span>
+                    </div>
+                  ))}
+
+                  {team.length === 0 && (
+                    <span className="trainer-empty-team">
+                      Nenhum Pokémon cadastrado.
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="trainer-card-footer">
+                <span>POKÉDEX COLLECTION</span>
+                <span>#{String(trainer.id).padStart(3, '0')}</span>
+              </div>
             </article>
           )
         })}
