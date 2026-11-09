@@ -4,6 +4,8 @@ import br.com.pokedex.backend.model.Pokemon;
 import br.com.pokedex.backend.repository.PokemonRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,9 +25,11 @@ public class PokemonService {
 
     // Buscar Pokémon pelo ID
     public Pokemon buscarPorId(Integer id) {
-        return pokemonRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pokémon não encontrado."));
-    }
+        return pokemonRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Pokémon não encontrado."
+                ));
+}
 
     // Cadastrar Pokémon
     public Pokemon cadastrar(Pokemon pokemon) {
