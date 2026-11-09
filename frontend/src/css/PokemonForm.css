@@ -1,0 +1,128 @@
+.pokemon-form-container {
+  width: min(100%, 750px);
+  margin: 30px auto;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #151f32;
+  color: white;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.pokemon-form-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.pokemon-form-heading span {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: #94a3b8;
+}
+
+.pokemon-form-heading h2 {
+  margin-top: 8px;
+}
+
+.form-close {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.pokemon-form-container h3 {
+  margin: 25px 0 15px;
+}
+
+.form-fields,
+.form-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.pokemon-form-container label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.pokemon-form-container input:not([type="checkbox"]) {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #334155;
+  border-radius: 9px;
+  background: #0f172a;
+  color: white;
+}
+
+.pokemon-form-container input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pokemon-form-container .form-type {
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 20px;
+  color: #152033;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-type input {
+  accent-color: #152033;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.form-actions button {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 9px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-actions button:first-child {
+  background: #334155;
+  color: white;
+}
+
+.form-actions button:last-child {
+  background: #ef4444;
+  color: white;
+}
+
+.form-actions button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+@media (max-width: 550px) {
+  .form-fields,
+  .form-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .pokemon-form-container {
+    padding: 18px;
+  }
+}

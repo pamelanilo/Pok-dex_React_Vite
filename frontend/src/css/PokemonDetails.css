@@ -150,3 +150,46 @@
     height: 190px;
   }
 }
+
+.details-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.details-actions button,
+.add-pokemon-button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 10px;
+  background: #334155;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.details-actions button:hover,
+.add-pokemon-button:hover {
+  transform: translateY(-2px);
+  background: #475569;
+}
+
+.details-actions button:last-child {
+  background: #dc2626;
+}
+
+.details-actions button:last-child:hover {
+  background: #b91c1c;
+}
+
+.add-pokemon-button {
+  background: #dc2626;
+}
+
+@media (max-width: 500px) {
+  .details-actions {
+    flex-direction: column;
+  }
+}

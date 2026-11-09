@@ -1,20 +1,19 @@
-import '../css/PokemonDetails.css'
 import { useEffect, useRef } from 'react'
 import '../css/PokemonDetails.css'
 
-function PokemonDetails({ pokemon, onClose }) {
-  if (!pokemon) return null
-
+function PokemonDetails({ pokemon, onClose, onEdit, onDelete }) {
   const detailsRef = useRef(null)
 
-useEffect(() => {
-  if (pokemon) {
-    detailsRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
-  }
-}, [pokemon])
+  useEffect(() => {
+    if (pokemon) {
+      detailsRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }, [pokemon])
+
+  if (!pokemon) return null
 
   const stats = [
     { label: 'HP', value: pokemon.stats.hp },
@@ -25,7 +24,10 @@ useEffect(() => {
     { label: 'Velocidade', value: pokemon.stats.speed },
   ]
 
-  const totalStats = stats.reduce((total, stat) => total + stat.value, 0)
+  const totalStats = stats.reduce(
+    (total, stat) => total + stat.value,
+    0
+  )
 
   const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`
 
@@ -56,7 +58,7 @@ useEffect(() => {
           <h2>{pokemon.name}</h2>
 
           <div className="pokemon-types">
-            {pokemon.types.map((type) => (
+            {pokemon.types.map(type => (
               <span
                 className={`pokemon-type ${type.name.toLowerCase()}`}
                 key={type.id}
@@ -74,7 +76,7 @@ useEffect(() => {
           <span>Total: {totalStats}</span>
         </div>
 
-        {stats.map((stat) => (
+        {stats.map(stat => (
           <div className="details-stat" key={stat.label}>
             <div className="details-stat-info">
               <span>{stat.label}</span>
@@ -91,6 +93,22 @@ useEffect(() => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="details-actions">
+        <button
+          type="button"
+          onClick={() => onEdit(pokemon)}
+        >
+          Editar Pokémon
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onDelete(pokemon)}
+        >
+          Excluir Pokémon
+        </button>
       </div>
     </section>
   )

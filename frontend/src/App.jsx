@@ -5,6 +5,7 @@ import SearchBar from './components/SearchBar'
 import TypeFilter from './components/TypeFilter'
 import PokemonDetails from './components/PokemonDetails'
 import TrainerList from './components/TrainerList'
+import PokemonForm from './components/PokemonForm'
 import './css/App.css'
 
 const API_URL = 'http://localhost:8080/api/pokemons'
@@ -13,6 +14,9 @@ function App() {
   const [pokemons, setPokemons] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showForm, setShowForm] = useState(false)
+  const [editingPokemon, setEditingPokemon] = useState(null)
+  const [saving, setSaving] = useState(false)
 
   const [search, setSearch] = useState('')
   const [selectedType, setSelectedType] = useState('')
@@ -91,6 +95,121 @@ function App() {
     setActiveTab(tab)
     setSelectedPokemon(null)
   }
+  // Abre o formulário para cadastrar
+function handleAddPokemon() {
+  setEditingPokemon(null)
+  setShowForm(true)
+  setSelectedPokemon(null)
+}
+
+// Abre o formulário para editar
+function handleEditPokemon(pokemon) {
+  setEditingPokemon(pokemon)
+  setSelectedPokemon(null)
+  setActiveTab('pokedex')
+  setShowForm(true)
+}
+
+// Fecha o formulário
+function handleCancelForm() {
+  setShowForm(false)
+  setEditingPokemon(null)
+}
+
+// Cadastra ou atualiza um Pokémon
+async function handleSavePokemon(pokemonData) {
+  try {
+    setSaving(true)
+
+    const isEditing = editingPokemon !== null
+
+    // Impede cadastro com ID duplicado
+    if (
+      !isEditing &&
+      pokemons.some(pokemon => pokemon.id === pokemonData.id)
+    ) {
+      alert('Já existe um Pokémon com esse ID.')
+      return
+    }
+
+    const url = isEditing
+      ? `${API_URL}/${editingPokemon.id}`
+      : API_URL
+
+    const response = await fetch(url, {
+      method: isEditing ? 'PUT' : 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(pokemonData),
+    })
+
+    if (!response.ok) {
+      throw new Error('Não foi possível salvar o Pokémon.')
+    }
+
+    const savedPokemon = await response.json()
+
+    if (isEditing) {
+      setPokemons(current =>
+        current.map(pokemon =>
+          pokemon.id === savedPokemon.id ? savedPokemon : pokemon
+        )
+      )
+
+      setSelectedPokemon(savedPokemon)
+    } else {
+      setPokemons(current => [...current, savedPokemon])
+    }
+
+    setShowForm(false)
+    setEditingPokemon(null)
+
+    alert(isEditing
+      ? 'Pokémon atualizado com sucesso!'
+      : 'Pokémon cadastrado com sucesso!'
+    )
+
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    setSaving(false)
+  }
+}
+
+// Exclui um Pokémon
+async function handleDeletePokemon(pokemon) {
+  const confirmed = window.confirm(
+    `Deseja realmente excluir ${pokemon.name} da Pokédex?`
+  )
+
+  if (!confirmed) return
+
+  try {
+    const response = await fetch(`${API_URL}/${pokemon.id}`, {
+      method: 'DELETE',
+    })
+
+    if (!response.ok) {
+      throw new Error('Não foi possível excluir o Pokémon.')
+    }
+
+    setPokemons(current =>
+      current.filter(item => item.id !== pokemon.id)
+    )
+
+    setFavoriteIds(current =>
+      current.filter(id => id !== pokemon.id)
+    )
+
+    setSelectedPokemon(null)
+
+    alert('Pokémon excluído com sucesso!')
+
+  } catch (error) {
+    alert(error.message)
+  }
+}
 
   return (
     <main className="app-container">
@@ -128,6 +247,7 @@ function App() {
       {activeTab === 'pokedex' && (
         <section className="tab-content">
           <div className="section-heading">
+
             <div>
               <h2>Explore os Pokémon</h2>
               <p>Encontre seu próximo favorito.</p>
@@ -137,6 +257,24 @@ function App() {
               {filteredPokemon.length} encontrados
             </span>
           </div>
+
+          <button
+            type="button"
+            className="add-pokemon-button"
+            onClick={handleAddPokemon}
+          >
+            + Adicionar Pokémon
+          </button>
+
+          {showForm && (
+          <PokemonForm
+            pokemon={editingPokemon}
+            types={pokedexData.types}
+            onSave={handleSavePokemon}
+            onCancel={handleCancelForm}
+            saving={saving}
+            />
+          )}
 
           <SearchBar search={search} setSearch={setSearch} />
 
@@ -149,6 +287,8 @@ function App() {
           <PokemonDetails
             pokemon={selectedPokemon}
             onClose={() => setSelectedPokemon(null)}
+            onEdit={handleEditPokemon}
+            onDelete={handleDeletePokemon}
           />
 
           {loading ? (
