@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import pokedexData from './data/pokedex-data.json'
 import PokemonList from './components/PokemonList'
 import SearchBar from './components/SearchBar'
 import TypeFilter from './components/TypeFilter'
@@ -9,11 +8,17 @@ import PokemonForm from './components/PokemonForm'
 import './css/App.css'
 
 const API_URL = 'http://localhost:8080/api/pokemons'
+const TRAINERS_API_URL = 'http://localhost:8080/api/trainers'
 
 function App() {
   const [pokemons, setPokemons] = useState([])
+  const [trainers, setTrainers] = useState([])
+
   const [loading, setLoading] = useState(true)
+  const [trainersLoading, setTrainersLoading] = useState(true)
   const [error, setError] = useState('')
+  const [trainersError, setTrainersError] = useState('')
+
   const [showForm, setShowForm] = useState(false)
   const [editingPokemon, setEditingPokemon] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -54,6 +59,28 @@ function App() {
     carregarPokemons()
   }, [])
 
+  // Busca os treinadores na API
+  useEffect(() => {
+    async function carregarTreinadores() {
+      try {
+        const response = await fetch(TRAINERS_API_URL)
+
+        if (!response.ok) {
+          throw new Error('Não foi possível carregar os treinadores.')
+        }
+
+        const data = await response.json()
+        setTrainers(data)
+      } catch (error) {
+        setTrainersError(error.message)
+      } finally {
+        setTrainersLoading(false)
+      }
+    }
+
+    carregarTreinadores()
+  }, [])
+
   // Salva os favoritos no navegador
   useEffect(() => {
     localStorage.setItem(
@@ -61,6 +88,15 @@ function App() {
       JSON.stringify(favoriteIds)
     )
   }, [favoriteIds])
+
+  // Extrai os tipos dos Pokémon carregados pela API
+  const types = [
+    ...new Map(
+      pokemons
+        .flatMap(pokemon => pokemon.types || [])
+        .map(type => [type.id, type])
+    ).values()
+  ]
 
   // Pesquisa e filtro
   const filteredPokemon = pokemons.filter((pokemon) => {
@@ -74,15 +110,17 @@ function App() {
 
     const matchesType =
       selectedType === '' ||
-      pokemon.types.some((type) => type.name === selectedType)
+      pokemon.types?.some(type => type.name === selectedType)
 
     return (matchesName || matchesId) && matchesType
   })
 
+  // Filtra os Pokémon favoritos
   const favoritePokemon = pokemons.filter((pokemon) =>
     favoriteIds.includes(pokemon.id)
   )
 
+  // Adiciona ou remove um favorito
   function toggleFavorite(pokemonId) {
     setFavoriteIds((currentIds) =>
       currentIds.includes(pokemonId)
@@ -91,137 +129,143 @@ function App() {
     )
   }
 
+  // Troca de aba
   function changeTab(tab) {
     setActiveTab(tab)
     setSelectedPokemon(null)
   }
+
   // Abre o formulário para cadastrar
-function handleAddPokemon() {
-  setEditingPokemon(null)
-  setShowForm(true)
-  setSelectedPokemon(null)
-}
+  function handleAddPokemon() {
+    setEditingPokemon(null)
+    setShowForm(true)
+    setSelectedPokemon(null)
+  }
 
-// Abre o formulário para editar
-function handleEditPokemon(pokemon) {
-  setEditingPokemon(pokemon)
-  setSelectedPokemon(null)
-  setActiveTab('pokedex')
-  setShowForm(true)
-}
+  // Abre o formulário para editar
+  function handleEditPokemon(pokemon) {
+    setEditingPokemon(pokemon)
+    setSelectedPokemon(null)
+    setActiveTab('pokedex')
+    setShowForm(true)
+  }
 
-// Fecha o formulário
-function handleCancelForm() {
-  setShowForm(false)
-  setEditingPokemon(null)
-}
-
-// Cadastra ou atualiza um Pokémon
-async function handleSavePokemon(pokemonData) {
-  try {
-    setSaving(true)
-
-    const isEditing = editingPokemon !== null
-
-    // Impede cadastro com ID duplicado
-    if (
-      !isEditing &&
-      pokemons.some(pokemon => pokemon.id === pokemonData.id)
-    ) {
-      alert('Já existe um Pokémon com esse ID.')
-      return
-    }
-
-    const url = isEditing
-      ? `${API_URL}/${editingPokemon.id}`
-      : API_URL
-
-    const response = await fetch(url, {
-      method: isEditing ? 'PUT' : 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(pokemonData),
-    })
-
-    if (!response.ok) {
-      throw new Error('Não foi possível salvar o Pokémon.')
-    }
-
-    const savedPokemon = await response.json()
-
-    if (isEditing) {
-      setPokemons(current =>
-        current.map(pokemon =>
-          pokemon.id === savedPokemon.id ? savedPokemon : pokemon
-        )
-      )
-
-      setSelectedPokemon(savedPokemon)
-    } else {
-      setPokemons(current => [...current, savedPokemon])
-    }
-
+  // Fecha o formulário
+  function handleCancelForm() {
     setShowForm(false)
     setEditingPokemon(null)
-
-    alert(isEditing
-      ? 'Pokémon atualizado com sucesso!'
-      : 'Pokémon cadastrado com sucesso!'
-    )
-
-  } catch (error) {
-    alert(error.message)
-  } finally {
-    setSaving(false)
   }
-}
 
-// Exclui um Pokémon
-async function handleDeletePokemon(pokemon) {
-  const confirmed = window.confirm(
-    `Deseja realmente excluir ${pokemon.name} da Pokédex?`
-  )
+  // Cadastra ou atualiza um Pokémon
+  async function handleSavePokemon(pokemonData) {
+    try {
+      setSaving(true)
 
-  if (!confirmed) return
+      const isEditing = editingPokemon !== null
 
-  try {
-    const response = await fetch(`${API_URL}/${pokemon.id}`, {
-      method: 'DELETE',
-    })
+      if (
+        !isEditing &&
+        pokemons.some(pokemon => pokemon.id === pokemonData.id)
+      ) {
+        alert('Já existe um Pokémon com esse ID.')
+        return
+      }
 
-    if (!response.ok) {
-      throw new Error('Não foi possível excluir o Pokémon.')
+      const url = isEditing
+        ? `${API_URL}/${editingPokemon.id}`
+        : API_URL
+
+      const response = await fetch(url, {
+        method: isEditing ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pokemonData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Não foi possível salvar o Pokémon.')
+      }
+
+      const savedPokemon = await response.json()
+
+      if (isEditing) {
+        setPokemons(current =>
+          current.map(pokemon =>
+            pokemon.id === savedPokemon.id ? savedPokemon : pokemon
+          )
+        )
+
+        setSelectedPokemon(savedPokemon)
+      } else {
+        setPokemons(current => [...current, savedPokemon])
+      }
+
+      setShowForm(false)
+      setEditingPokemon(null)
+
+      alert(
+        isEditing
+          ? 'Pokémon atualizado com sucesso!'
+          : 'Pokémon cadastrado com sucesso!'
+      )
+
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      setSaving(false)
     }
-
-    setPokemons(current =>
-      current.filter(item => item.id !== pokemon.id)
-    )
-
-    setFavoriteIds(current =>
-      current.filter(id => id !== pokemon.id)
-    )
-
-    setSelectedPokemon(null)
-
-    alert('Pokémon excluído com sucesso!')
-
-  } catch (error) {
-    alert(error.message)
   }
-}
+
+  // Exclui um Pokémon
+  async function handleDeletePokemon(pokemon) {
+    const confirmed = window.confirm(
+      `Deseja realmente excluir ${pokemon.name} da Pokédex?`
+    )
+
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`${API_URL}/${pokemon.id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Não foi possível excluir o Pokémon.')
+      }
+
+      setPokemons(current =>
+        current.filter(item => item.id !== pokemon.id)
+      )
+
+      setFavoriteIds(current =>
+        current.filter(id => id !== pokemon.id)
+      )
+
+      setSelectedPokemon(null)
+
+      alert('Pokémon excluído com sucesso!')
+
+    } catch (error) {
+      alert(error.message)
+    }
+  }
 
   return (
     <main className="app-container">
+
       <header className="app-header">
         <p className="app-eyebrow">SEU GUIA POKÉMON</p>
+
         <h1>Minha Pokédex</h1>
+
         <p className="app-subtitle">
           Explore Pokémon, conheça treinadores e monte sua coleção.
         </p>
       </header>
 
       <nav className="app-tabs" aria-label="Navegação principal">
+
         <button
           className={activeTab === 'pokedex' ? 'active' : ''}
           onClick={() => changeTab('pokedex')}
@@ -242,12 +286,14 @@ async function handleDeletePokemon(pokemon) {
         >
           Favoritos ({favoriteIds.length})
         </button>
+
       </nav>
 
+      {/* ABA POKÉDEX */}
       {activeTab === 'pokedex' && (
         <section className="tab-content">
-          <div className="section-heading">
 
+          <div className="section-heading">
             <div>
               <h2>Explore os Pokémon</h2>
               <p>Encontre seu próximo favorito.</p>
@@ -267,19 +313,22 @@ async function handleDeletePokemon(pokemon) {
           </button>
 
           {showForm && (
-          <PokemonForm
-            pokemon={editingPokemon}
-            types={pokedexData.types}
-            onSave={handleSavePokemon}
-            onCancel={handleCancelForm}
-            saving={saving}
+            <PokemonForm
+              pokemon={editingPokemon}
+              types={types}
+              onSave={handleSavePokemon}
+              onCancel={handleCancelForm}
+              saving={saving}
             />
           )}
 
-          <SearchBar search={search} setSearch={setSearch} />
+          <SearchBar
+            search={search}
+            setSearch={setSearch}
+          />
 
           <TypeFilter
-            types={pokedexData.types}
+            types={types}
             selectedType={selectedType}
             setSelectedType={setSelectedType}
           />
@@ -292,9 +341,13 @@ async function handleDeletePokemon(pokemon) {
           />
 
           {loading ? (
-            <p className="empty-message">Carregando Pokémon...</p>
+            <p className="empty-message">
+              Carregando Pokémon...
+            </p>
           ) : error ? (
-            <p className="empty-message">{error}</p>
+            <p className="empty-message">
+              {error}
+            </p>
           ) : filteredPokemon.length > 0 ? (
             <PokemonList
               pokemon={filteredPokemon}
@@ -307,11 +360,14 @@ async function handleDeletePokemon(pokemon) {
               Nenhum Pokémon encontrado. Tente outra pesquisa.
             </p>
           )}
+
         </section>
       )}
 
+      {/* ABA TREINADORES */}
       {activeTab === 'trainers' && (
         <section className="tab-content">
+
           <div className="section-heading">
             <div>
               <h2>Treinadores</h2>
@@ -319,15 +375,28 @@ async function handleDeletePokemon(pokemon) {
             </div>
           </div>
 
-          <TrainerList
-            trainers={pokedexData.trainers}
-            pokemon={pokemons}
-          />
+          {trainersLoading ? (
+            <p className="empty-message">
+              Carregando treinadores...
+            </p>
+          ) : trainersError ? (
+            <p className="empty-message">
+              {trainersError}
+            </p>
+          ) : (
+            <TrainerList
+              trainers={trainers}
+              pokemon={pokemons}
+            />
+          )}
+
         </section>
       )}
 
+      {/* ABA FAVORITOS */}
       {activeTab === 'favorites' && (
         <section className="tab-content">
+
           <div className="section-heading">
             <div>
               <h2>Meus favoritos</h2>
@@ -336,7 +405,9 @@ async function handleDeletePokemon(pokemon) {
           </div>
 
           {loading ? (
-            <p className="empty-message">Carregando favoritos...</p>
+            <p className="empty-message">
+              Carregando favoritos...
+            </p>
           ) : favoritePokemon.length > 0 ? (
             <PokemonList
               pokemon={favoritePokemon}
@@ -355,8 +426,10 @@ async function handleDeletePokemon(pokemon) {
             pokemon={selectedPokemon}
             onClose={() => setSelectedPokemon(null)}
           />
+
         </section>
       )}
+
     </main>
   )
 }
