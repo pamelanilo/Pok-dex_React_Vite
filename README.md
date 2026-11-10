@@ -1,244 +1,121 @@
-# Minha Pokédex
+# Minha Pokédex — Atividade 04
 
-Aplicação web desenvolvida com **React + Vite** para explorar Pokémon, consultar seus atributos, conhecer treinadores e organizar uma coleção de favoritos.
+Aplicação full stack para consulta e gerenciamento dos Pokémon da primeira geração, desenvolvida com React + Vite, Spring Boot e MongoDB.
 
-O projeto apresenta uma Pokédex com os 151 Pokémon da primeira geração, permitindo buscar criaturas pelo nome ou número, filtrar por tipo, visualizar informações detalhadas e salvar favoritos no navegador. Também possui uma área dedicada aos treinadores, com suas imagens, insígnias e equipes Pokémon.
-
-## Capturas de Tela
-
-### Página Principal
-
-![Pokédex](pokedex-react/src/assets/images/pokedex-principal.png)
-
-### Filtro por Tipo
-
-![Filtro Ghost](pokedex-react/src/assets/images/pokedex-filtro-ghost.png)
-
-### Detalhes de Pokémon
-
-![Detalhes](pokedex-react/src/assets/images/detalhes-pokemon.png)
-
-### Favoritos
-
-![Favoritos](pokedex-react/src/assets/images/favoritos.png)
-
-### Treinadores
-
-![Treinadores](pokedex-react/src/assets/images/treinadores.png)
 ## Funcionalidades
 
-A aplicação permite:
-
-- visualizar os 151 Pokémon da primeira geração;
-- buscar Pokémon pelo nome ou número;
-- filtrar os resultados por tipo;
-- consultar os tipos e os atributos de cada Pokémon;
-- visualizar os atributos de HP, ataque, defesa, ataque especial, defesa especial e velocidade;
-- acompanhar os atributos por meio de barras visuais;
-- abrir uma área com informações detalhadas do Pokémon selecionado;
-- adicionar e remover Pokémon dos favoritos;
-- manter os favoritos salvos no navegador utilizando `localStorage`;
-- navegar entre as abas Pokédex, Treinadores e Favoritos;
-- visualizar treinadores, suas imagens, quantidade de insígnias e equipes Pokémon.
+- Listagem dos Pokémon consumidos pela API REST.
+- Busca por nome ou número da Pokédex.
+- Filtro por tipo.
+- Visualização dos atributos e detalhes.
+- Cadastro, edição e exclusão de Pokémon com persistência no MongoDB.
+- Área de treinadores com insígnias e equipes.
+- Favoritos salvos no navegador com `localStorage`.
 
 ## Tecnologias
 
-- JavaScript
-- React
-- Vite
-- HTML5
-- CSS3
-- Fetch API
-- LocalStorage
+- Frontend: React, Vite, JavaScript e CSS.
+- Backend: Java 25, Spring Boot, Spring Web MVC e Spring Data MongoDB.
+- Banco de dados: MongoDB Atlas.
+- Dados de origem: `Script_Pokedex.sql`.
 
-## Dependências
-
-As dependências e os comandos do projeto estão configurados no arquivo `package.json`.
-
-### React
-
-Utilizado para construir a interface da aplicação em componentes reutilizáveis e controlar os estados da interface.
-
-### Vite
-
-Responsável pelo ambiente de desenvolvimento e pela geração da versão de produção da aplicação.
-
-### PokéAPI
-
-Utilizada para obter as imagens oficiais dos Pokémon por meio de requisições à API.
-
-Referência: [PokéAPI](https://pokeapi.co/)
-
-### Pokémon Showdown
-
-As imagens dos treinadores são carregadas a partir da biblioteca de sprites do Pokémon Showdown.
-
-Referência: [Pokémon Showdown — Sprites de treinadores](https://play.pokemonshowdown.com/sprites/trainers/)
-
-As imagens externas dependem da disponibilidade dos respectivos endereços. Os personagens e elementos visuais de Pokémon pertencem aos seus respectivos titulares; este é um projeto acadêmico, sem vínculo oficial com a franquia.
-
-## Estrutura do Projeto
-
-A aplicação está organizada da seguinte maneira:
+## Estrutura
 
 ```text
-Pokédex_React_Vite/
-├── README.md
-├── img_README/
-│   ├── pagina-inicial.png
-│   └── lista-pokemon.png
-└── pokedex-react/
-    ├── index.html
-    ├── package.json
-    ├── package-lock.json
-    ├── vite.config.js
-    ├── eslint.config.js
-    └── src/
-        ├── App.jsx
-        ├── main.jsx
-        ├── index.css
-        ├── assets/
-        │   └── images/
-        ├── components/
-        │   ├── PokemonCard.jsx
-        │   ├── PokemonDetails.jsx
-        │   ├── PokemonList.jsx
-        │   ├── SearchBar.jsx
-        │   ├── TrainerList.jsx
-        │   └── TypeFilter.jsx
-        ├── css/
-        │   ├── App.css
-        │   ├── PokemonCard.css
-        │   ├── PokemonDetails.css
-        │   ├── PokemonList.css
-        │   ├── SearchBar.css
-        │   ├── TrainerList.css
-        │   └── TypeFilter.css
-        └── data/
-            └── pokedex-data.json
+.
+├── frontend/       # Aplicação React + Vite
+├── backend/        # API REST Spring Boot
+├── Script_Pokedex.sql
+└── README.md
 ```
 
-### Organização dos componentes
+## Pré-requisitos
 
-- **`App.jsx`**: controla as abas, a busca, o filtro por tipo, o Pokémon selecionado e a lista de favoritos.
-- **`PokemonList.jsx`**: apresenta a lista de Pokémon recebida por propriedades.
-- **`PokemonCard.jsx`**: exibe as informações resumidas de cada Pokémon, carrega sua imagem e permite favoritar ou abrir os detalhes.
-- **`PokemonDetails.jsx`**: apresenta os tipos e atributos do Pokémon selecionado.
-- **`SearchBar.jsx`**: permite pesquisar pelo nome ou número.
-- **`TypeFilter.jsx`**: permite filtrar a lista por tipo.
-- **`TrainerList.jsx`**: apresenta os treinadores, suas imagens, insígnias e equipes.
-- **`pokedex-data.json`**: armazena os dados utilizados na aplicação, incluindo tipos, Pokémon, atributos, treinadores e identificadores dos Pokémon de cada equipe.
+- Node.js e npm.
+- Java 25.
+- Maven.
+- Uma instância MongoDB acessível (por exemplo, MongoDB Atlas).
 
-## Dados dos Pokémon
+## Configuração do MongoDB
 
-Os dados principais ficam no arquivo `src/data/pokedex-data.json`. Cada Pokémon possui identificador, nome, tipos e atributos numéricos.
+O backend lê a conexão pela variável de ambiente `MONGODB_URI`. Não coloque usuário, senha ou URI diretamente no código nem em arquivos versionados.
 
-Os atributos apresentados são:
+No PowerShell, configure a variável para a sessão atual:
 
-| Atributo | Descrição |
-| --- | --- |
-| HP | Pontos de vida |
-| Ataque | Atributo de ataque físico |
-| Defesa | Atributo de defesa física |
-| Ataque especial | Atributo de ataque especial |
-| Defesa especial | Atributo de defesa especial |
-| Velocidade | Atributo de velocidade |
+```powershell
+$env:MONGODB_URI = "sua-uri-de-conexao-do-mongodb"
+```
 
-As imagens dos Pokémon são obtidas separadamente pela PokéAPI, usando o identificador de cada Pokémon. Por isso, é necessária uma conexão com a internet para carregar essas imagens.
+A aplicação utiliza o banco `pokedex`. A primeira inicialização importa os 151 Pokémon e os 12 treinadores quando as respectivas coleções estão vazias. Se os documentos já existirem, a carga inicial é ignorada para não sobrescrever alterações feitas pela API.
 
-## Busca e Filtro por Tipo
+Os dados de origem estão documentados em `Script_Pokedex.sql`; o script é uma fonte de dados SQL e não deve ser executado diretamente no MongoDB.
 
-A busca permite localizar um Pokémon pelo nome ou pelo número da Pokédex. O filtro por tipo pode ser utilizado sozinho ou em conjunto com a busca, restringindo os resultados às opções selecionadas.
+## Executar o backend
 
-Quando nenhum Pokémon corresponde aos critérios informados, a aplicação exibe uma mensagem indicando que nenhum resultado foi encontrado.
+Em um terminal PowerShell:
 
-## Favoritos
+```powershell
+cd backend
+mvn spring-boot:run
+```
 
-Cada card de Pokémon possui um controle para adicionar ou remover a criatura dos favoritos. A quantidade de favoritos também aparece na aba correspondente.
+A API ficará disponível em `http://localhost:8080`.
 
-Os identificadores selecionados são armazenados no `localStorage` do navegador com a chave `pokedex-favorites`. Assim, os favoritos continuam disponíveis após atualizar a página no mesmo navegador, desde que os dados locais não sejam apagados.
+## Executar o frontend
 
-## Treinadores Pokémon
+Em outro terminal PowerShell:
 
-A seção de treinadores apresenta personagens como Ash, Brock, Misty, Lt. Surge, Erika, Koga, Sabrina, Blaine, Giovanni, Gary, Team Rocket e Lance.
-
-Para cada treinador, a aplicação exibe a imagem, a quantidade de insígnias registrada nos dados do projeto e a equipe relacionada. A equipe é montada a partir dos identificadores presentes no arquivo `pokedex-data.json`, que são associados aos dados dos Pokémon.
-
-As imagens dos treinadores são carregadas do Pokémon Showdown. A disponibilidade dessas imagens depende do serviço externo.
-
-## Como Executar
-
-### Pré-requisitos
-
-- Node.js instalado;
-- npm instalado;
-- conexão com a internet para carregar as imagens externas.
-
-### VS Code
-
-1. Extraia ou abra a pasta do projeto no VS Code.
-2. Abra o terminal integrado.
-3. Entre na pasta `pokedex-react`.
-4. Instale as dependências.
-5. Inicie o servidor de desenvolvimento.
-
-```bash
-cd pokedex-react
+```powershell
+cd frontend
 npm install
 npm run dev
 ```
 
-O Vite exibirá no terminal o endereço local para acessar a aplicação, geralmente:
+A aplicação ficará disponível em `http://localhost:5173`.
 
-```text
-http://localhost:5173/
+O frontend está configurado para consumir a API em `http://localhost:8080`.
+
+## Endpoints
+
+### Pokémon
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/api/pokemons` | Lista os Pokémon |
+| GET | `/api/pokemons/{id}` | Busca um Pokémon |
+| POST | `/api/pokemons` | Cadastra um Pokémon |
+| PUT | `/api/pokemons/{id}` | Atualiza um Pokémon |
+| DELETE | `/api/pokemons/{id}` | Exclui um Pokémon |
+
+### Treinadores
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/api/trainers` | Lista os treinadores |
+| GET | `/api/trainers/{id}` | Busca um treinador |
+
+## Verificações
+
+Backend:
+
+```powershell
+cd backend
+mvn clean test
 ```
 
-Abra esse endereço no navegador.
+Frontend:
 
-### Gerar a versão de produção
-
-Para verificar a compilação de produção, execute dentro da pasta `pokedex-react`:
-
-```bash
+```powershell
+cd frontend
 npm run build
+npm run lint
 ```
 
-Os arquivos gerados serão armazenados na pasta `dist`.
-
-Para executar uma prévia da versão compilada:
-
-```bash
-npm run preview
-```
-
-## Fluxo de Teste
-
-Uma sequência simples para testar a aplicação é:
-
-1. abrir a aba **Pokédex**;
-2. pesquisar um Pokémon pelo nome;
-3. pesquisar outro Pokémon pelo número;
-4. selecionar um tipo e verificar os resultados;
-5. abrir um card para consultar os detalhes do Pokémon;
-6. adicionar um Pokémon aos favoritos;
-7. acessar a aba **Favoritos** e verificar se ele aparece;
-8. atualizar a página e conferir se os favoritos foram mantidos;
-9. remover um Pokémon dos favoritos;
-10. acessar a aba **Treinadores** e conferir as imagens, as insígnias e as equipes.
+Para validar a integração, mantenha backend e frontend em execução e confira as rotas `/api/pokemons` e `/api/trainers`. A conexão com o MongoDB Atlas depende da URI válida, da disponibilidade do cluster e da liberação do IP de origem na lista de acesso do Atlas.
 
 ## Observações
 
-- Os dados principais dos Pokémon e dos treinadores estão armazenados localmente no arquivo JSON do projeto.
-- As imagens dos Pokémon e dos treinadores são carregadas de serviços externos, portanto precisam de conexão com a internet.
-- Os favoritos são armazenados localmente no navegador e não são sincronizados entre dispositivos.
-- O projeto não possui backend ou banco de dados próprio.
-
-## Referências
-
-- [PokéAPI](https://pokeapi.co/) — dados e imagens dos Pokémon.
-- [Pokémon Showdown — Sprites de treinadores](https://play.pokemonshowdown.com/sprites/trainers/) — imagens dos treinadores.
-
-## Licença
-
-Este projeto foi desenvolvido para fins acadêmicos e de aprendizagem. Pokémon e seus personagens são propriedades de seus respectivos titulares. As referências externas são indicadas para reconhecimento das fontes utilizadas.
+- As imagens dos Pokémon são carregadas de recursos externos da PokéAPI.
+- As imagens dos treinadores são carregadas dos sprites do Pokémon Showdown.
+- Favoritos são armazenados localmente no navegador e não são sincronizados com o MongoDB.
+- Projeto acadêmico, sem vínculo oficial com a franquia Pokémon.
