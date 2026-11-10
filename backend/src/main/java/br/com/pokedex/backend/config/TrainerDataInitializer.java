@@ -19,6 +19,11 @@ public class TrainerDataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
+        if (trainerRepository.count() > 0) {
+            System.out.println("Treinadores já existem no MongoDB. Importação inicial ignorada.");
+            return;
+        }
+
         List<Trainer> trainers = List.of(
             new Trainer(1, "Ash", 9, List.of(25, 3, 6, 9, 131, 143)),
             new Trainer(2, "Brock", 1, List.of(74, 95)),
